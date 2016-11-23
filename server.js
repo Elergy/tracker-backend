@@ -17,6 +17,7 @@ function initMiddlewares(mongoConnection) {
     app.use(bodyParser());
     
     app.use(session({
+        name: 'session',
         secret: process.env.session_secret,
         resave: true,
         saveUninitialized: false,

@@ -18,6 +18,22 @@
         },
         "/user/login": {
             "$ref": "./requests/user/login.json"
+        },
+
+        "/projects": {
+            "$ref": "./requests/projects/projects.json"
+        },
+
+        "/projects/{id}": {
+            "$ref": "./requests/projects/project.json"
+        },
+
+        "/projects/{id}/participants": {
+            "$ref": "./requests/projects/participants.json"
+        },
+
+        "/projects/{id}/participants/{participant_id}": {
+            "$ref": "./requests/projects/participant.json"
         }
     }
 }

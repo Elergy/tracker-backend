@@ -1,0 +1,73 @@
+{
+    "put": {
+        "summary": "Edit an information about the participant of the project",
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "description": "Id of the project",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "participant_id",
+                "in": "path",
+                "description": "Id of the participant",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "role",
+                "in": "formData",
+                "description": "New role for the participant",
+                "required": false,
+                "type": "string",
+                "enum": [
+                    "admin",
+                    "user"
+                ]
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "An information about the project",
+                "schema": {
+                    "$ref": "./../../models/project.schema.json"
+                }
+            }
+        },
+        "tags": [
+            "Project"
+        ]
+    },
+    "delete": {
+        "summary": "Delete the participant the project",
+        "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "description": "Id of the project",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "participant_id",
+                "in": "path",
+                "description": "Id of the participant",
+                "required": true,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "An information about the project",
+                "schema": {
+                    "$ref": "./../../responses/ok-response.json"
+                }
+            }
+        },
+        "tags": [
+            "Project"
+        ]
+    }
+}

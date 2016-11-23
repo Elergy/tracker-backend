@@ -19,7 +19,7 @@
         ],
         "responses": {
             "200": {
-                "$ref": "./../../responses/ok-and-session-id.json"
+                "$ref": "./../../responses/ok-response.json"
             }
         },
         "tags": [

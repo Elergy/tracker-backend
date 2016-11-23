@@ -1,0 +1,56 @@
+{
+    "type": "object",
+    "title": "Project",
+    "required": [
+        "_id",
+        "title",
+        "color",
+        "owner_id",
+        "participants"
+    ],
+    "properties": {
+        "_id": {
+            "type": "string",
+            "description": "An unique identifier of the project"
+        },
+        "title": {
+            "type": "string",
+            "description": "Title of the project"
+        },
+        "color": {
+            "type": "string",
+            "description": "UI color for the project in HEX format"
+        },
+        "owner_id": {
+            "type": "string",
+            "description": "An identifier of the creator of the project"
+        },
+        "participants": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Participant"
+            }
+        }
+    },
+    "definitions": {
+        "Participant": {
+            "type": "object",
+            "required": [
+                "_id",
+                "role"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "description": "An unique identifier of the user"
+                },
+                "role": {
+                    "enum": [
+                        "admin",
+                        "user"
+                    ]
+                }
+            }
+        }
+    }
+}
