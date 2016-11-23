@@ -1,0 +1,29 @@
+{
+    "post": {
+        "summary": "Registration new user",
+        "parameters": [
+            {
+                "name": "email",
+                "in": "formData",
+                "description": "New user's email",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "password",
+                "in": "formData",
+                "description": "New user's password",
+                "required": true,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "200": {
+                "$ref": "./../../responses/ok-and-session-id.json"
+            }
+        },
+        "tags": [
+            "User"
+        ]
+    }
+}

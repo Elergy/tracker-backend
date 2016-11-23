@@ -1,0 +1,23 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "TimeTracker API",
+        "version": "1.0"
+    },
+    "host": "localhost:8089",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/api/v1",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/user/register": {
+            "$ref": "./requests/user/register.json"
+        },
+        "/user/login": {
+            "$ref": "./requests/user/login.json"
+        }
+    }
+}
