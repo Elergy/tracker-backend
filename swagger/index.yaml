@@ -1,0 +1,493 @@
+swagger: 2.0
+info:
+  title: TimeTracker API
+  version: 1.0
+host: localhost:8089
+schemes:
+  http
+basePath: /api/v1
+produces:
+  - application/json
+
+paths:
+
+  /user/register:
+    post:
+      summary: Registration new user
+      parameters:
+        - name: email
+          in: formData
+          description: New user's email
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: New user's password
+          required: true
+          type: string
+      tags:
+        - User
+      responses:
+        "200":
+          description: OK Message
+          schema:
+            $ref: Ok
+
+  /user/login:
+    post:
+      summary: Authenticate a user and return a new session id
+      parameters:
+        - name: email
+          in: formData
+          description: New user's email
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: New user's password
+          required: true
+          type: string
+      tags:
+        - User
+      responses:
+         "200":
+           description: OK Message
+           schema:
+            $ref: Ok
+
+  /projects:
+      get:
+        summary: Get a list of projects for current user
+        tags:
+          - Project
+        responses:
+          "200":
+            description: A list of projects
+            schema:
+              $ref: ListOfProjects
+      post:
+        summary: Create a new project
+        tags:
+          - Project
+        parameters:
+          - name: title
+            description: Title of the new project
+            required: true
+            type: string
+            in: formData
+          - name: color
+            description: UI color of new project
+            required: false
+            type: string
+            in: formData
+        responses:
+          "200":
+            description: Full information about the created project
+            schema:
+              $ref: Project
+
+  /projects/{id}:
+    get:
+      summary: Get an information about the project
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Full information about the project
+          schema:
+            $ref: Project
+    put:
+      summary: Edit an information about the project
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+        - name: title
+          in: formData
+          description: Title of the project
+          required: false
+          type: string
+        - name: color
+          in: formData
+          description: UI-color of the project
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Full information about the project
+          schema:
+            $ref: Project
+    delete:
+      summary: Remove the project
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK Message
+          schema:
+            $ref: Ok
+
+  /projects/{id}/participants:
+    post:
+      summary: Create a new participant for the project
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+        - name: participant_id
+          in: formData
+          description: An id of the new participant
+          required: true
+          type: string
+        - name: role
+          in: formData
+          description: A role of the new participant
+          required: false
+          default: user
+          enum:
+            - user
+            - admin
+      responses:
+        "200":
+          description: List of participants of the project
+          schema:
+            $ref: ListOfUserRoles
+
+  /projects/{id}/participants/{participant_id}:
+    put:
+      summary: Edit some information about the participant
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+        - name: participant_id
+          in: path
+          description: An id of the participant
+          required: true
+          type: string
+        - name: role
+          in: formData
+          description: A role of the participant
+          required: true
+          enum:
+            - user
+            - admin
+      responses:
+        "200":
+          description: List of participants of the project
+          schema:
+            $ref: ListOfUserRoles
+    delete:
+      summary: Remove the participant
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: An id of the project
+          required: true
+          type: string
+        - name: participant_id
+          in: path
+          description: An id of the participant
+          required: true
+          type: string
+      responses:
+        "200":
+          description: List of participants of the project
+          schema:
+            $ref: ListOfUserRoles
+
+  /tasks:
+    get:
+      summary: Get an information about user's tasks
+      tags:
+        - Task
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum amount of tasks to return
+          default: 30
+          type: number
+          required: false
+        - name: start_date
+          in: query
+          description: Start of the interval of time - a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+        - name: end_date
+          in: query
+          description: End of the interval of time - a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+        - name: projects
+          description: An array of project's identifiers tasks should belong to
+          in: query
+          type: array
+          items:
+            type: string
+          required: false
+        - name: tags
+          description: An array of tags tasks should contain
+          in: query
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: A list of tasks
+          schema:
+            $ref: ListOfTasks
+
+    post:
+      summary: Start tracking a new task
+      tags:
+        - Task
+      parameters:
+        - name: title
+          in: formData
+          description: A title of the task
+          type: string
+          required: false
+        - name: project_id
+          in: formData
+          description: An id of a project the task belong to
+          type: string
+          required: false
+        - name: tags
+          in: formData
+          type: array
+          items:
+            type: string
+          required: false
+          description: An array of tags for the task
+        - name: start_time
+          description: a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+          in: formData
+        - name: end_time
+          description: a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+          in: formData
+      responses:
+        "200":
+          description: The new task
+          schema:
+            $ref: Task
+
+  /tasks/{id}:
+    put:
+      summary: Edit the task
+      tags:
+        - Task
+      parameters:
+        - name: id
+          in: path
+          description: An id of the task
+          required: true
+          type: string
+        - name: title
+          in: formData
+          description: A title of the task
+          type: string
+          required: false
+        - name: project_id
+          in: formData
+          description: An id of a project the task belong to
+          type: string
+          required: false
+        - name: tags
+          in: formData
+          type: array
+          items:
+            type: string
+          required: false
+          description: An array of tags for the task
+        - name: start_time
+          description: a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+          in: formData
+        - name: end_time
+          description: a number of milliseconds from January 1, 1970
+          type: number
+          required: false
+          in: formData
+      responses:
+        "200":
+          description: The updated task
+          schema:
+            $ref: Task
+
+    delete:
+      summary: Delete the task
+      tags:
+        - Task
+      parameters:
+        - name: id
+          in: path
+          description: An id of the task
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Ok message
+          schema:
+            $ref: Ok
+
+
+definitions:
+  Ok:
+    required:
+      - ok
+    properties:
+      ok:
+        enum:
+          - true
+
+  ProjectForList:
+    type: object
+    required:
+      - _id
+      - title
+      - color
+    properties:
+      _id:
+        type: string
+        description: An unique identifier of the project
+      title:
+        type: string
+        description: Title of the project
+      color:
+        type: string
+        description: UI color for the project in HEX format
+
+  ListOfProjects:
+    type: array
+    items:
+      $ref: ProjectForList
+
+  PublicUserInfo:
+    type: object
+    required:
+      - _id
+      - name
+    properties:
+      _id:
+        type: string
+        description: An unique identifier of the user
+      name:
+        type: string
+        description: Public name of the user
+
+  UserRole:
+    type: object
+    required:
+      - _id
+      - name
+      - role
+    properties:
+      _id:
+        type: string
+        description: An unique identifier of the user
+      name:
+        type: string
+        description: Public name of the user
+      role:
+        type: string
+        description: The user's role for the project
+        default: user
+        enum:
+          - user
+          - admin
+
+  ListOfUserRoles:
+    type: array
+    items:
+      $ref: UserRole
+
+  Project:
+    type: object
+    required:
+      - _id
+      - title
+      - color
+      - owner
+      - participants
+    properties:
+      _id:
+        type: string
+        description: An unique identifier of the project
+      title:
+        type: string
+        description: Title of the project
+      color:
+        type: string
+        description: UI color for the project in HEX format
+      owner:
+        $ref: PublicUserInfo
+      participants:
+        type: array
+        items:
+          $ref: UserRole
+
+  Task:
+    type: object
+    required:
+      - _id
+      - title
+      - project
+      - tags
+      - start_time
+      - end_time
+    properties:
+      _id:
+        type: string
+        description: An identifier of the task
+      title:
+        type: string
+        description: A title of the task
+      project:
+        $ref: ProjectForList
+      tags:
+        type: array
+        items:
+          type: string
+        description: A list of tags
+      start_time:
+        type: number
+        description: a number of milliseconds from January 1, 1970
+      end_time:
+        type: number
+        description: a number of milliseconds from January 1, 1970
+
+  ListOfTasks:
+    type: array
+    items:
+      $ref: Task
