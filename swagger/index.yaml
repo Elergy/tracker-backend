@@ -20,6 +20,11 @@ paths:
           description: New user's email
           required: true
           type: string
+        - name: name
+          in: formData
+          description: User's public name
+          required: true
+          type: string
         - name: password
           in: formData
           description: New user's password
@@ -55,7 +60,7 @@ paths:
            schema:
             $ref: Ok
 
-  /projects:
+  /project:
       get:
         summary: Get a list of projects for current user
         tags:
@@ -82,11 +87,11 @@ paths:
             in: formData
         responses:
           "200":
-            description: Full information about the created project
+            description: Short information about the created project
             schema:
-              $ref: Project
+              $ref: ProjectForList
 
-  /projects/{id}:
+  /project/{id}:
     get:
       summary: Get an information about the project
       tags:
@@ -96,7 +101,7 @@ paths:
           in: path
           description: An id of the project
           required: true
-          type: string
+          type: number
       responses:
         "200":
           description: Full information about the project
@@ -111,7 +116,7 @@ paths:
           in: path
           description: An id of the project
           required: true
-          type: string
+          type: number
         - name: title
           in: formData
           description: Title of the project
@@ -122,6 +127,11 @@ paths:
           description: UI-color of the project
           required: false
           type: string
+        - name: is_active
+          in: formData
+          description: Active state of the project
+          required: false
+          type: boolean
       responses:
         "200":
           description: Full information about the project
@@ -136,14 +146,14 @@ paths:
           in: path
           description: An id of the project
           required: true
-          type: string
+          type: number
       responses:
         "200":
           description: OK Message
           schema:
             $ref: Ok
 
-  /projects/{id}/participants:
+  /project/{id}/participant:
     post:
       summary: Create a new participant for the project
       tags:
@@ -153,12 +163,12 @@ paths:
           in: path
           description: An id of the project
           required: true
-          type: string
+          type: number
         - name: participant_id
           in: formData
           description: An id of the new participant
           required: true
-          type: string
+          type: number
         - name: role
           in: formData
           description: A role of the new participant
@@ -173,7 +183,7 @@ paths:
           schema:
             $ref: ListOfUserRoles
 
-  /projects/{id}/participants/{participant_id}:
+  /project/{id}/participant/{participant_id}:
     put:
       summary: Edit some information about the participant
       tags:
@@ -183,12 +193,12 @@ paths:
           in: path
           description: An id of the project
           required: true
-          type: string
+          type: number
         - name: participant_id
           in: path
           description: An id of the participant
           required: true
-          type: string
+          type: number
         - name: role
           in: formData
           description: A role of the participant
@@ -215,14 +225,14 @@ paths:
           in: path
           description: An id of the participant
           required: true
-          type: string
+          type: number
       responses:
         "200":
           description: List of participants of the project
           schema:
             $ref: ListOfUserRoles
 
-  /tasks:
+  /task:
     get:
       summary: Get an information about user's tasks
       tags:
@@ -276,7 +286,7 @@ paths:
         - name: project_id
           in: formData
           description: An id of a project the task belong to
-          type: string
+          type: number
           required: false
         - name: tags
           in: formData
@@ -301,7 +311,7 @@ paths:
           schema:
             $ref: Task
 
-  /tasks/{id}:
+  /task/{id}:
     put:
       summary: Edit the task
       tags:
@@ -311,7 +321,7 @@ paths:
           in: path
           description: An id of the task
           required: true
-          type: string
+          type: number
         - name: title
           in: formData
           description: A title of the task
@@ -320,7 +330,7 @@ paths:
         - name: project_id
           in: formData
           description: An id of a project the task belong to
-          type: string
+          type: number
           required: false
         - name: tags
           in: formData
@@ -354,7 +364,7 @@ paths:
           in: path
           description: An id of the task
           required: true
-          type: string
+          type: number
       responses:
         "200":
           description: Ok message
@@ -377,9 +387,10 @@ definitions:
       - _id
       - title
       - color
+      - is_active
     properties:
       _id:
-        type: string
+        type: number
         description: An unique identifier of the project
       title:
         type: string
@@ -387,6 +398,9 @@ definitions:
       color:
         type: string
         description: UI color for the project in HEX format
+      is_active:
+        type: boolean
+        description: A flag to show whether the project is active or not
 
   ListOfProjects:
     type: array
@@ -400,7 +414,7 @@ definitions:
       - name
     properties:
       _id:
-        type: string
+        type: number
         description: An unique identifier of the user
       name:
         type: string
@@ -414,7 +428,7 @@ definitions:
       - role
     properties:
       _id:
-        type: string
+        type: number
         description: An unique identifier of the user
       name:
         type: string
@@ -442,7 +456,7 @@ definitions:
       - participants
     properties:
       _id:
-        type: string
+        type: number
         description: An unique identifier of the project
       title:
         type: string
@@ -468,7 +482,7 @@ definitions:
       - end_time
     properties:
       _id:
-        type: string
+        type: number
         description: An identifier of the task
       title:
         type: string

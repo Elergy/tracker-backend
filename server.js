@@ -14,6 +14,8 @@ const app = express();
 app.set('port', process.env.port || 8089);
 
 function initMiddlewares(mongoConnection) {
+    require('./utils/auth');
+
     app.use(bodyParser());
     
     app.use(session({
@@ -26,7 +28,6 @@ function initMiddlewares(mongoConnection) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    require('./utils/auth');
 }
 
 function initRoutes() {
@@ -34,6 +35,9 @@ function initRoutes() {
     app.use('/swagger', express.static('swagger'));
 
     app.use('/api/v1/user', routes.user, (err, req, res, next) => {
+        res.json({error: err.message});
+    });
+    app.use('/api/v1/project', routes.project, (err, req, res, next) => {
         res.json({error: err.message});
     });
 }

@@ -4,7 +4,7 @@ const {
 } = require('./methods/getters');
 
 module.exports = {
-    add: require('./methods/add'),
+    create: require('./methods/create'),
     isPasswordValid: require('./methods/is-password-valid'),
     getByEmail,
     getById
