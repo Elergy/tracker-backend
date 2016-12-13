@@ -1,14 +1,10 @@
-const assert = require('assert');
-const Ajv = require('ajv');
-const ajv = new Ajv();
-
-const projectSchema = require('./../utils/project.schema');
-const _getProjectInfo = require('./../utils/_get-project-info');
+const getProjectInfo = require('./../utils/get-project-info');
 const {
     hasAdminRights,
     isParticipant,
-} = require('./../utils/_validate-rights');
+} = require('./../utils/validate-rights');
 const {getById: getUserById} = require('./../../user/user');
+const validateSchema = require('./../utils/validate-schema');
 
 /**
  * Add a new participant to a project
@@ -20,7 +16,7 @@ const {getById: getUserById} = require('./../../user/user');
  * @returns {Promise.<Object>}
  */
 async function addParticipant(userId, projectId, participantInfo) {
-    const project = await _getProjectInfo(projectId);
+    const project = await getProjectInfo(projectId);
 
     if (!project) {
         throw new Error('A project is not found');
@@ -44,10 +40,12 @@ async function addParticipant(userId, projectId, participantInfo) {
         role: participantInfo.role
     });
 
-    assert(ajv.validate(projectSchema, project), ajv.errorsText());
+    if (!validateSchema(project)) {
+        throw new Error('Project has invalid format');
+    }
 
     await project.save();
-    return _getProjectInfo(projectId);
+    return getProjectInfo(projectId);
 }
 
 module.exports = addParticipant;

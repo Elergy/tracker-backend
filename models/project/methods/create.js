@@ -1,10 +1,6 @@
-const Ajv = require('ajv');
-const ajv = new Ajv();
-const assert = require('assert');
-
 const Project = require('./../project-model');
 const {getById: getUserById} = require('./../../user/user');
-const projectSchema = require('./../utils/project.schema');
+const validateSchema = require('./../utils/validate-schema');
 
 /**
  * create a new Project for the user
@@ -29,7 +25,9 @@ async function create(userId, projectInfo) {
         projectInfo.color = '#ff0000';
     }
 
-    assert(ajv.validate(projectSchema, projectInfo), ajv.errorsText());
+    if (!validateSchema(projectInfo)) {
+        throw new Error('Project has invalid format');
+    }
 
     const project = new Project(projectInfo);
 

@@ -9,12 +9,13 @@ const MongoStore = require('connect-mongo')(session);
 
 const connectToDB = require('./utils/db/connect-to-db');
 const routes = require('./routes');
+const checkUserMiddleware = require('./middlewares/check-user-middleware');
 
 const app = express();
 app.set('port', process.env.port || 8089);
 
 function initMiddlewares(mongoConnection) {
-    require('./utils/auth');
+    require('./middlewares/auth-middleware');
 
     app.use(bodyParser());
     
@@ -37,7 +38,10 @@ function initRoutes() {
     app.use('/api/v1/user', routes.user, (err, req, res, next) => {
         res.json({error: err.message});
     });
-    app.use('/api/v1/project', routes.project, (err, req, res, next) => {
+    app.use('/api/v1/project', checkUserMiddleware, routes.project, (err, req, res, next) => {
+        res.json({error: err.message});
+    });
+    app.use('/api/v1/task', checkUserMiddleware, routes.task, (err, req, res, next) => {
         res.json({error: err.message});
     });
 }

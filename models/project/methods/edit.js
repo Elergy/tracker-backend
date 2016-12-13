@@ -1,10 +1,6 @@
-const assert = require('assert');
-const Ajv = require('ajv');
-const ajv = new Ajv();
-
-const _getProjectInfo = require('./../utils/_get-project-info');
-const {hasAdminRights} = require('./../utils/_validate-rights');
-const projectSchema = require('./../utils/project.schema');
+const getProjectInfo = require('./../utils/get-project-info');
+const {hasAdminRights} = require('./../utils/validate-rights');
+const validateSchema = require('./../utils/validate-schema');
 
 const fieldsAllowedToEdit = [
     'title',
@@ -21,7 +17,7 @@ async function edit(userId, projectId, newParameters) {
         throw new Error(`${forbiddenParameters} can not been saved to Project`);
     }
 
-    const project = await _getProjectInfo(projectId);
+    const project = await getProjectInfo(projectId);
 
     if (!project) {
         throw new Error('A project is not found');
@@ -33,7 +29,9 @@ async function edit(userId, projectId, newParameters) {
 
     Object.assign(project, newParameters);
 
-    assert(ajv.validate(projectSchema, project), ajv.errorsText());
+    if (!validateSchema(project)) {
+        throw new Error('Project has invalid format');
+    }
 
     return project.save();
 }

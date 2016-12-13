@@ -244,12 +244,12 @@ paths:
           default: 30
           type: number
           required: false
-        - name: start_date
+        - name: start_time
           in: query
           description: Start of the interval of time - a number of milliseconds from January 1, 1970
           type: number
           required: false
-        - name: end_date
+        - name: end_time
           in: query
           description: End of the interval of time - a number of milliseconds from January 1, 1970
           type: number
@@ -479,7 +479,7 @@ definitions:
       - project
       - tags
       - start_time
-      - end_time
+      - user
     properties:
       _id:
         type: number
@@ -489,6 +489,8 @@ definitions:
         description: A title of the task
       project:
         $ref: ProjectForList
+      user:
+        $ref: PublicUserInfo
       tags:
         type: array
         items:
@@ -500,6 +502,7 @@ definitions:
       end_time:
         type: number
         description: a number of milliseconds from January 1, 1970
+
 
   ListOfTasks:
     type: array

@@ -1,5 +1,5 @@
-const _getProjectInfo = require('./../utils/_get-project-info');
-const {isParticipant} = require('./../utils/_validate-rights');
+const getProjectInfo = require('./../utils/get-project-info');
+const {isParticipant} = require('./../utils/validate-rights');
 
 /**
  * Get data about the project
@@ -8,7 +8,7 @@ const {isParticipant} = require('./../utils/_validate-rights');
  * @returns {Object}
  */
 async function getInfo(userId, projectId) {
-    const project = await _getProjectInfo(projectId);
+    const project = await getProjectInfo(projectId);
     if (!project) {
         throw new Error('A project is not found');
     }

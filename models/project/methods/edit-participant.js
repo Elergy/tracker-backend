@@ -1,8 +1,8 @@
-const _getProjectInfo = require('./../utils/_get-project-info');
+const getProjectInfo = require('./../utils/get-project-info');
 const {
     hasAdminRights,
     isOwner,
-} = require('./../utils/_validate-rights');
+} = require('./../utils/validate-rights');
 
 /**
  * Edit information about a participant
@@ -14,7 +14,7 @@ const {
  * @returns {Object} - information about project
  */
 async function editParticipant(userId, projectId, participantId, participantData) {
-    const project = await _getProjectInfo(projectId);
+    const project = await getProjectInfo(projectId);
 
     if (!project) {
         throw new Error('A project is not found');
@@ -37,7 +37,7 @@ async function editParticipant(userId, projectId, participantId, participantData
     }
 
     await project.save();
-    return _getProjectInfo(projectId);
+    return getProjectInfo(projectId);
 }
 
 module.exports = editParticipant;
