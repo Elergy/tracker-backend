@@ -3,9 +3,9 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const {
     getByEmail,
-    getById,
-    isPasswordValid
-} = require('./../models/user/user');
+    getById
+} = require('./../models/user/methods/getters');
+const isPasswordValid = require('./../models/user/methods/is-password-valid');
 
 const strategy = new LocalStrategy(
     {

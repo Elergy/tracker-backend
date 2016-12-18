@@ -17,11 +17,9 @@ const {isParticipant} = require('./../../../models/project/utils/validate-rights
  * @param {Number} [taskData.end_time] - end time in milliseconds
  */
 async function create(userId, taskData) {
-    const now = Date.now();
-
     taskData = Object.assign(
         {
-            start_time: now,
+            start_time: Date.now(),
             tags: []
         },
         taskData,
@@ -56,7 +54,7 @@ async function create(userId, taskData) {
         end_time: null,
         user: userId
     }, {
-        end_time: now
+        end_time: taskData.start_time
     }).exec();
 
     let taskWithoutEndDate;

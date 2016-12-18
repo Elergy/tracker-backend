@@ -3,7 +3,7 @@ const {
     hasAdminRights,
     isParticipant,
 } = require('./../utils/validate-rights');
-const {getById: getUserById} = require('./../../user/user');
+const {getById: getUserById} = require('./../../user/methods/getters');
 const validateSchema = require('./../utils/validate-schema');
 
 /**
